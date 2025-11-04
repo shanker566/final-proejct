@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🌆 Smart City Theme */
+body {
+  background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
