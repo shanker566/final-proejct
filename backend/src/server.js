@@ -7,41 +7,43 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-// ✅ Connect to MongoDB
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/smartcitydb';
-console.log('Attempting to connect to MongoDB...');
-mongoose.connect(MONGO_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch(e => {
-    console.error('❌ MongoDB connection error:', e);
-    console.error('Details:', {
-      code: e.code,
-      codeName: e.codeName,
-      name: e.name
+// ✅ Connect to MongoDB (Render + Local)
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) {
+  console.error('❌ Missing MONGO_URI environment variable!');
+} else {
+  console.log('Attempting to connect to MongoDB...');
+  mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+    .then(() => console.log('✅ MongoDB connected successfully'))
+    .catch((e) => {
+      console.error('❌ MongoDB connection error:', e.message);
+      console.error('Details:', {
+        code: e.code,
+        codeName: e.codeName,
+        name: e.name,
+      });
     });
-  });
+}
 
 // ✅ Import Routes
 const cityRoutes = require('./routes/city.routes');
 const serviceRoutes = require('./routes/service.routes');
 const feedbackRoutes = require('./routes/feedback.routes');
-const adminRoutes = require('./routes/admin.routes'); // 👈 NEW admin routes
+const adminRoutes = require('./routes/admin.routes');
 
 // ✅ Use Routes
 app.use('/api/cities', cityRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/feedback', feedbackRoutes);
-app.use('/api/admin', adminRoutes); // 👈 Enable admin endpoints
+app.use('/api/admin', adminRoutes);
 
-// ✅ Sample Seeder Route (optional)
+// ✅ Seeder Route (optional)
 const City = require('./models/city.model');
 const Service = require('./models/service.model');
 
-// Seed route: clears cities & services then inserts sample cities and services
 app.get('/api/seed', async (_req, res) => {
   console.log('Starting seed...');
   const sample = [
@@ -87,7 +89,6 @@ app.get('/api/seed', async (_req, res) => {
   ];
 
   try {
-    // Clear existing data to avoid duplicates
     console.log('Clearing existing data...');
     await Service.deleteMany({});
     await City.deleteMany({});
@@ -103,8 +104,7 @@ app.get('/api/seed', async (_req, res) => {
         svcDocs.push(svc);
         console.log(`Created service: ${svc.name} for ${c.name}`);
       }
-      // attach service ids to city
-      const serviceIds = svcDocs.map(s => s._id);
+      const serviceIds = svcDocs.map((s) => s._id);
       await City.findByIdAndUpdate(c._id, { $addToSet: { publicServices: { $each: serviceIds } } });
       const populated = await City.findById(c._id).populate('publicServices');
       created.push(populated);
@@ -117,11 +117,24 @@ app.get('/api/seed', async (_req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+// ✅ Root route for testing
+app.get('/', (req, res) => {
+  res.send(`
+    🚀 Smart City Backend API is running successfully!<br>
+    <br>Try these endpoints:
+    <ul>
+      <li>GET <a href="/api/cities">/api/cities</a></li>
+      <li>GET <a href="/api/seed">/api/seed</a></li>
+      <li>GET <a href="/api/services">/api/services</a></li>
+    </ul>
+  `);
+});
+
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`Try these endpoints:
-    - GET http://localhost:${PORT}/api/cities
-    - GET http://localhost:${PORT}/api/seed
+    - GET https://final-proejct.onrender.com/api/cities
+    - GET https://final-proejct.onrender.com/api/seed
   `);
 });
