@@ -5,7 +5,7 @@ export default function FeedbackForm(){
   const [form, setForm] = useState({ name:'', email:'', message:'', issueType:'' });
   const submit = async (e) => {
     e.preventDefault();
-    await axios.post(import.meta.env.VITE_API_URL + '/feedback', form);
+    await axios.post(`${import.meta.env.VITE_API_URL}/feedback`, form);
     alert('Feedback sent');
     setForm({ name:'', email:'', message:'', issueType:'' });
   };

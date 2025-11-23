@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/stats");
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/admin/stats`);
         setStats(res.data);
       } catch {
         setStats({ totalCities: 3, totalUsers: 52, totalReports: 11 });

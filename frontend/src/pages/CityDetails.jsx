@@ -6,8 +6,8 @@ export default function CityDetails(){
   const { id } = useParams();
   const [city, setCity] = useState(null);
   useEffect(()=>{
-    // Expect backend base URL in VITE_BACKEND_URL (example: "http://localhost:5000/api")
-    const base = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    // Use VITE_API_URL as primary base (must include '/api')
+    const base = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
     axios.get(`${base}/cities/${id}`)
       .then(r=> setCity(r.data))
       .catch(()=> setCity(null));

@@ -18,7 +18,7 @@ export default function AdminRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/register", form);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/admin/register`, form);
       setMessage("✅ Registration successful!");
       setTimeout(() => navigate("/admin/login"), 1500);
     } catch (error) {

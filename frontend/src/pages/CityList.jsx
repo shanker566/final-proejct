@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import { getCityDetails } from "../api/api";
 
 export default function CityList() {
   const [cities, setCities] = useState([]);
@@ -8,8 +8,18 @@ export default function CityList() {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/cities");
-        setCities(response.data);
+        const res = await getCityDetails();
+        console.log("Cities response:", res.data);
+        // Response shape may be either an array or an object containing a `cities` array.
+        if (Array.isArray(res.data)) {
+          setCities(res.data);
+        } else if (res.data && Array.isArray(res.data.cities)) {
+          setCities(res.data.cities);
+        } else {
+          // fallback: try data.cities or data.data
+          if (res.data && Array.isArray(res.data.data)) setCities(res.data.data);
+          else setCities([]);
+        }
       } catch (error) {
         console.error("Error fetching cities:", error);
       }
