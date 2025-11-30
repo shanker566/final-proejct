@@ -2,22 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🌆 Smart City Theme */
+/* 🌈 Vibrant Smart City Theme */
 body {
-  background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+  background: linear-gradient(135deg, #60a5fa 0%, #7c3aed 100%); /* sky-400 -> violet-600 */
   font-family: 'Inter', sans-serif;
-  color: #1e293b;
+  color: #0f172a; /* navy-900 */
 }
 
 h1, h2, h3 {
-  font-weight: 700;
+  font-weight: 800;
+  color: #0ea5e9; /* bright cyan for headings */
+  text-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
 }
 
 .card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.18s cubic-bezier(.2,.9,.3,1), box-shadow 0.18s ease;
+  border: 1px solid rgba(255,255,255,0.06);
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 18px 40px rgba(124, 58, 237, 0.18);
+}
+
+/* Accent utility classes for quick use in components */
+.accent-btn {
+  background: linear-gradient(90deg, #06b6d4, #7c3aed);
+  color: white;
+}
+
+.muted {
+  color: #94a3b8; /* slate-400 */
 }

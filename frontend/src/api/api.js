@@ -31,3 +31,4 @@ export const addCity = (data) => API.post("/cities", data);
 export const reportIssue = (data) => API.post("/issues", data);
 export const getIssues = () => API.get("/issues");
 export const sendFeedback = (data) => API.post("/feedback", data);
+export const getCityById = (id) => API.get(`/cities/${id}`);
